@@ -1,16 +1,16 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Persistence ( readPages
-                   , readPage
-                   , readHistory
-                   , readDeletedPageHash
-                   , readTrash
-                   , readUsers
-                   , writeAndCommit
-                   , writeUsers
-                   , removeAndCommit
-                   , runCommand
-                   , hashPassword
-                   ) where
+module Network.GitWiki.Persistence ( readPages
+                                   , readPage
+                                   , readHistory
+                                   , readDeletedPageHash
+                                   , readTrash
+                                   , readUsers
+                                   , writeAndCommit
+                                   , writeUsers
+                                   , removeAndCommit
+                                   , runCommand
+                                   , hashPassword
+                                   ) where
 
 import           Control.Monad
 import qualified Data.ByteString.Lazy.UTF8 as BS
@@ -27,7 +27,7 @@ import           System.Directory
 import           System.FilePath.Posix
 import qualified System.Process as P
 
-import Types
+import Network.GitWiki.Types
 
 runCommand :: String -> String -> [String] -> IO String
 runCommand cwd cmd args = P.readCreateProcess (P.proc cmd args) { P.cwd = Just cwd } ""

@@ -5,9 +5,15 @@ build-type:    Simple
 
 executable          gitwiki
     hs-source-dirs: src
-    main-is:        Main.hs
+    main-is:        gitwiki.hs
     ghc-options:    -Wall -threaded -O2 -rtsopts -with-rtsopts=-N
     extensions:     OverloadedStrings
+    other-modules:  Network.GitWiki
+                  , Network.GitWiki.Css
+                  , Network.GitWiki.Layout
+                  , Network.GitWiki.Persistence
+                  , Network.GitWiki.Types
+                  , Paths_gitwiki
     build-depends:  base   >= 4      && < 5
                   , scotty
                   , text == 1.2.2.1

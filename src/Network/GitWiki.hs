@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+module Network.GitWiki (run) where
 
 import           Control.Monad.IO.Class
 import qualified Data.ByteString.Char8 as BS
@@ -8,22 +9,19 @@ import           Data.SecureMem
 import qualified Data.Text.Lazy as T
 import           Network.Wai.Middleware.HttpAuth
 import qualified Paths_gitwiki as Package
+import           System.Directory
 import           System.Environment
+import           System.Exit
 import           Text.Blaze.Html.Renderer.Text
 import           Text.Blaze.Html
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import           Text.Markdown
-import           System.Directory
-import           System.Exit
 import           Web.Scotty
 
-import Layout
-import Persistence
-import Types
-
-instance Eq User where
-  x == y = email x == email y
+import Network.GitWiki.Layout
+import Network.GitWiki.Persistence
+import Network.GitWiki.Types
 
 replaceAtIndex :: Int -> a -> [a] -> [a]
 replaceAtIndex n x xs = a ++ (x:b) where (a, (_:b)) = splitAt n xs
@@ -90,8 +88,8 @@ extractUser config = do
       user = fromJust $ find (\u -> email u == BS.unpack basicAuthEmail) users
   return user
 
-main :: IO ()
-main = do
+run :: IO ()
+run = do
   args <- getArgs
   let wikiDir_ = if length args > 0 then last args else "./"
       config   = Config { wikiDir = wikiDir_, version = Package.version }

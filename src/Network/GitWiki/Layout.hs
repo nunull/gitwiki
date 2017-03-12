@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Layout where
+module Network.GitWiki.Layout where
 
 import qualified Clay as C
 import           Data.List
@@ -10,9 +10,9 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import           Text.Markdown
 
-import Css
-import Persistence
-import Types
+import Network.GitWiki.Css
+import Network.GitWiki.Persistence
+import Network.GitWiki.Types
 
 skeleton :: Config -> User -> [(String, String)] -> Html -> IO Html
 skeleton config user nav page = do

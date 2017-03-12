@@ -1,4 +1,4 @@
-module Types where
+module Network.GitWiki.Types where
 
 import qualified Data.Text.Lazy as T
 import           Data.Time
@@ -27,3 +27,6 @@ data User = User { name :: String
                  , password :: String
                  , admin :: Bool
                  }
+
+instance Eq User where
+  x == y = email x == email y
