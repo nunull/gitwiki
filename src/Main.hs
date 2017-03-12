@@ -49,10 +49,14 @@ setup config = do
   usersFileExists <- doesFileExist usersFilePath
   if not usersFileExists
     then do
-      userName     <- prompt "Enter username"
-      userEmail    <- prompt "Enter email"
-      userPassword <- prompt "Enter password"
-      let users = [User { name = userName, email = userEmail, password = userPassword, admin = True }]
+      userName     <- prompt "Enter username:"
+      userEmail    <- prompt "Enter email:"
+      userPassword <- prompt "Enter password:"
+      let users = [ User { name = userName
+                         , email = userEmail
+                         , password = hashPassword userPassword
+                         , admin = True
+                         } ]
       writeUsers config users
     else return ()
 
@@ -75,7 +79,9 @@ authenticate config email_ password_ = do
   where
     findUser u = emailMatches && passwordMatches where
       emailMatches    = email u == BS.unpack email_
-      passwordMatches = (secureMemFromByteString $ BS.pack $ password u) == secureMemFromByteString password_
+      password1       = secureMemFromByteString $ BS.pack $ password u
+      password2       = secureMemFromByteString $ BS.pack $ hashPassword $ BS.unpack password_
+      passwordMatches = password1 == password2
 
 extractUser config = do
   users      <- liftIO $ readUsers config
@@ -264,7 +270,7 @@ main = do
       users         <- liftIO $ readUsers config
       let user       = User { name = nameParam
                             , email = emailParam
-                            , password = passwordParam
+                            , password = hashPassword passwordParam
                             , admin = (adminParam :: String) /= ""
                             }
           users'     = users ++ [user]
@@ -305,7 +311,7 @@ main = do
       let oldUser    = find (\u -> email u == emailParam) users
           newUser    = User { name = nameParam
                             , email = emailParam
-                            , password = passwordParam
+                            , password = hashPassword passwordParam
                             , admin = (adminParam :: String) /= ""
                             }
           users'     = case oldUser of

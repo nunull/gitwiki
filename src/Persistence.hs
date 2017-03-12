@@ -9,9 +9,12 @@ module Persistence ( readPages
                    , writeUsers
                    , removeAndCommit
                    , runCommand
+                   , hashPassword
                    ) where
 
 import           Control.Monad
+import qualified Data.ByteString.Lazy.UTF8 as BS
+import           Data.Digest.Pure.SHA
 import           Data.List
 import           Data.List.Split
 import           Data.String.Utils
@@ -139,3 +142,6 @@ readDeletedPageHash config name = do
   let cwd = wikiDir config ++ "/data"
   hash   <- runCommand cwd "git" ["rev-list", "-n", "1", "HEAD", "--", name ++ ".md"]
   return $ strip hash
+
+hashPassword :: String -> String
+hashPassword password = showDigest $ sha512 $ BS.fromString password
