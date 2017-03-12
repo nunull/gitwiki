@@ -106,7 +106,7 @@ run = do
 
     get "/" $ do
       user     <- extractUser config
-      let nav   = [("add", "/p/add")]
+      let nav   = []
       pageHtml <- liftIO $ indexView config
       p        <- liftIO $ skeleton config user nav pageHtml
       html $ renderHtml p
@@ -135,8 +135,7 @@ run = do
       user      <- extractUser config
       pageParam <- param "page"
       page      <- liftIO $ readPage config pageParam "HEAD"
-      let nav    = [ ("add", "/p/add")
-                   , ("edit", "/p/" ++ pageParam ++ "/edit")
+      let nav    = [ ("edit", "/p/" ++ pageParam ++ "/edit")
                    , ("remove", "/p/" ++ pageParam ++ "/remove")
                    , ("history", "/p/" ++ pageParam ++ "/history")
                    ]
@@ -239,7 +238,7 @@ run = do
     get "/users" $ do
       user   <- extractUser config
       users  <- liftIO $ readUsers config
-      let nav = [("add", "/users/add")]
+      let nav = []
       p <- liftIO $ skeleton config user nav $ do
         H.h1 "Users"
         H.ul $ mapM_ (H.li . userView) users

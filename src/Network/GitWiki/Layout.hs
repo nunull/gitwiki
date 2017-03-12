@@ -23,18 +23,25 @@ skeleton config user nav page = do
       H.title "gitwiki"
     H.body $ do
       H.header $ do
-        H.nav $ do
+        H.nav ! A.class_ "nav-left" $ do
+          H.a "add page" ! A.href "/p/add" ! A.class_ "button"
           H.a "home" ! A.href "/"
           H.a "users" ! A.href "/users"
           H.a "trash" ! A.href "/trash"
-        H.ul $ mapM_ (H.li . pageLink) pageNames
-        H.footer $ do
-          H.span $ toHtml (name user ++ " <" ++ email user ++ ">")
-          H.br
+        H.nav ! A.class_ "nav-right" $ mapM_ navLink nav
+      H.div ! A.class_ "content" $ do
+        H.div ! A.class_ "sidebar" $ do
+          H.ul $ mapM_ (H.li . pageLink) pageNames
+        H.main page
+      H.footer $ do
+        H.nav $ do
+          H.strong $ toHtml $ name user
+          H.span $ do
+            H.span " <"
+            H.a ! A.href (stringValue ("mailto:" ++ email user)) $ toHtml $ email user
+            H.span ">"
+          H.span "version"
           H.span $ toHtml $ showVersion $ version config
-      H.main $ do
-        H.nav $ mapM_ navLink nav
-        page
 
 pageLink :: String -> Html
 pageLink pageName = H.a ! A.href (stringValue $ "/p/" ++ pageName) $ toHtml pageName

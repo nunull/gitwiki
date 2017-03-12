@@ -6,41 +6,74 @@ import Data.Monoid
 
 css :: Css
 css = do
+  a ? do
+    textDecoration none
+    color darkBlue
+  ".button" <> button ? do
+    cursor pointer
+    border solid (px 0) transparent
+    borderRadius tinyLength tinyLength tinyLength tinyLength
+    padding smallLength smallLength smallLength smallLength
+    background darkBlue
+    color white
+    ":hover" & do
+      background $ darken 0.1 darkBlue
+  h1 <> h2 ?  fontWeight normal
   body ? do
     display flex
-    fontFamily [] [sansSerif]
-    margin zero zero zero zero
-  header ? do
-    display flex
+    minHeight (vh 100)
     flexDirection column
-    width sidebarWidth
-    paddingLeft smallLength
-    ul ? do
+    margin zero zero zero zero
+    fontFamily [] [sansSerif]
+    fontSize (px 14)
+  header ? do
+    marginTop (px $ - 13)
+    display flex
+    nav ? do
+      background darkGrey
+      star ? color white
+    ".nav-left" ? do
+      width sidebarWidth
+    ".nav-right" ? do
       flexGrow 1
+  footer ? nav ? background white
+  ".content" ? do
+    display flex
+    flexGrow 1
+    ".sidebar" ? do
+      display flex
+      flexDirection column
+      width sidebarWidth
+      paddingLeft smallLength
+      ul ?  flexGrow 1
+    main_ ?  flexGrow 1
   nav ? do
     marginTop smallLength
     marginBottom smallLength
     padding smallLength smallLength smallLength smallLength
     background lightGrey
-  (nav <> Clay.div) |> (star) ? do
-    marginRight smallLength
+  (nav <> Clay.div) |> (star) ?  marginRight smallLength
   main_ ? do
     width $ pct 100
     maxWidth $ pageWidth
-  textarea ? do
-    minHeight $ px 500
+  textarea ? minHeight (px 500)
+  pre ? do
+    padding smallLength smallLength smallLength smallLength
+    borderRadius tinyLength tinyLength tinyLength tinyLength
+    background lightGrey
   "input[type=text]" <> "input[type=email]" <> "input[type=password]" <> textarea ? do
     width $ pct 100
     boxSizing borderBox
     border solid (px 1) grey
     marginBottom smallLength
     padding smallLength smallLength smallLength smallLength
-  ":focus" ? do
-    outline solid (px 3) darkBlue
+  ":not(a):focus" ? outline solid (px 3) darkBlue
   where
     zero         = px 0
-    smallLength  = px 10
+    tinyLength   = px 2
+    smallLength  = px 13
     pageWidth    = px 700
     sidebarWidth = px 300
     darkBlue     = rgb 53 112 206
-    lightGrey    = rgb 220 220 220
+    lightGrey    = rgb 230 230 230
+    darkGrey     = rgb 40 40 40
