@@ -43,7 +43,7 @@ css = do
     fontFamily [] [sansSerif]
     fontSize (px 14)
   header ? do
-    marginTop (px $ - 13)
+    marginTop (px $ - 18)
     display flex
     nav ? do
       background darkGrey
@@ -75,7 +75,7 @@ css = do
   where
     zero         = px 0
     tinyLength   = px 2
-    smallLength  = px 13
+    smallLength  = px 18
     pageWidth    = px 700
     sidebarWidth = px 300
     darkBlue     = rgb 53 112 206
