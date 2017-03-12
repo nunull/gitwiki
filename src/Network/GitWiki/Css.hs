@@ -19,6 +19,22 @@ css = do
     ":hover" & do
       background $ darken 0.1 darkBlue
   h1 <> h2 ?  fontWeight normal
+  pre ? do
+    padding smallLength smallLength smallLength smallLength
+    borderRadius tinyLength tinyLength tinyLength tinyLength
+    background lightGrey
+  "input[type=text]" <> "input[type=email]" <> "input[type=password]" <> textarea ? do
+    width $ pct 100
+    boxSizing borderBox
+    border solid (px 0) transparent
+    marginBottom smallLength
+    padding smallLength smallLength smallLength smallLength
+    background lightGrey
+    fontFamily [] [monospace]
+  textarea ? do
+    minHeight (px 500)
+    "resize" -: "vertical"
+  ":not(a):focus" ? outline solid (px 3) darkBlue
   body ? do
     display flex
     minHeight (vh 100)
@@ -56,18 +72,6 @@ css = do
   main_ ? do
     width $ pct 100
     maxWidth $ pageWidth
-  textarea ? minHeight (px 500)
-  pre ? do
-    padding smallLength smallLength smallLength smallLength
-    borderRadius tinyLength tinyLength tinyLength tinyLength
-    background lightGrey
-  "input[type=text]" <> "input[type=email]" <> "input[type=password]" <> textarea ? do
-    width $ pct 100
-    boxSizing borderBox
-    border solid (px 1) grey
-    marginBottom smallLength
-    padding smallLength smallLength smallLength smallLength
-  ":not(a):focus" ? outline solid (px 3) darkBlue
   where
     zero         = px 0
     tinyLength   = px 2
