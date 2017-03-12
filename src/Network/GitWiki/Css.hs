@@ -37,9 +37,6 @@ css = do
     padding smallLength smallLength smallLength smallLength
   ":focus" ? do
     outline solid (px 3) darkBlue
-  ul ? do
-    listStyleType none
-    paddingLeft zero
   where
     zero         = px 0
     smallLength  = px 10
