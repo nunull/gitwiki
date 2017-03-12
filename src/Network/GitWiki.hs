@@ -91,13 +91,16 @@ extractUser config = do
 run :: IO ()
 run = do
   args <- getArgs
-  let wikiDir_ = if length args > 0 then last args else "./"
+  portEnv <- lookupEnv "PORT"
+
+  let port     = maybe 3000 read portEnv
+      wikiDir_ = if length args > 0 then last args else "./"
       config   = Config { wikiDir = wikiDir_, version = Package.version }
 
   setup config
 
   putStrLn $ "Directory: " ++ (wikiDir config)
-  scotty 3000 $ do
+  scotty port $ do
     let password = secureMemFromByteString ""
     middleware $ basicAuth (authenticate config) "auth"
 
