@@ -3,6 +3,7 @@ module Network.GitWiki.Layout where
 
 import qualified Clay as C
 import           Data.List
+import           Data.String.Utils
 import           Data.Time
 import           Data.Version
 import           Text.Blaze.Html
@@ -102,6 +103,16 @@ historyItemView rev = do
     if not $ isLatest rev
       then H.a "revert" ! A.href (stringValue $ "/p/" ++ pageSlug rev ++ "/history/" ++ hash rev ++ "/revert")
       else ""
+  diffView $ diff rev
+
+diffView :: String -> Html
+diffView diff = H.div ! A.class_ "diff" $ do
+  mapM_ diffLineView $ drop 6 $ lines diff
+  where
+    diffLineView line = if startswith "+"  line then H.div ! A.class_ "diff-line-added" $ toHtml $ drop 1 $ line
+                   else if startswith "-"  line then H.div ! A.class_ "diff-line-removed" $ toHtml $ drop 1 $ line
+                   else if startswith "\\" line then H.div ! A.class_ "diff-line-meta" $ toHtml $ drop 1 $ line
+                                                else H.div ! A.class_ "diff-line" $ toHtml line
 
 revisionView :: Config -> Page -> IO Html
 revisionView config page = return $ do

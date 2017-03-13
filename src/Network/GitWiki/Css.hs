@@ -30,7 +30,7 @@ css = do
     marginBottom smallLength
     padding smallLength smallLength smallLength smallLength
     background lightGrey
-    fontFamily [] [monospace]
+    monoFont
   textarea ? do
     minHeight (px 500)
     "resize" -: "vertical"
@@ -63,7 +63,7 @@ css = do
       paddingLeft smallLength
       ul ?  flexGrow 1
     main_ ?  flexGrow 1
-  nav ? do
+  nav <> ".diff" ? do
     marginTop smallLength
     marginBottom smallLength
     padding smallLength smallLength smallLength smallLength
@@ -72,6 +72,26 @@ css = do
   main_ ? do
     width $ pct 100
     maxWidth $ pageWidth
+  ".diff" ? do
+    monoFont
+    ".diff-line-added" ? do
+      color green
+      ":before" & do
+        "content" -: "'+'"
+        marginRight smallLength
+        opacity 0.5
+    ".diff-line-removed" ? do
+      color red
+      ":before" & do
+        "content" -: "'-'"
+        marginRight smallLength
+        opacity 0.5
+    ".diff-line-meta" ? do
+      color grey
+      ":before" & do
+        "content" -: "''"
+        marginRight smallLength
+        opacity 0.5
   where
     zero         = px 0
     tinyLength   = px 2
@@ -81,3 +101,4 @@ css = do
     darkBlue     = rgb 53 112 206
     lightGrey    = rgb 230 230 230
     darkGrey     = rgb 40 40 40
+    monoFont     = fontFamily ["Monaco"] [monospace]

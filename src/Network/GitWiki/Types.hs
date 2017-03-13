@@ -20,7 +20,10 @@ data Revision = Revision { hash :: String
                          , date :: UTCTime
                          , message :: String
                          , isLatest :: Bool
+                         , diff :: String
                          }
+
+-- data Diff = Diff
 
 data User = User { name :: String
                  , email :: String

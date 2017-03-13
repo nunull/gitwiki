@@ -112,22 +112,31 @@ removeAndCommit config user slug = do
 
 readHistory :: Config -> String -> IO [Revision]
 readHistory config slug = do
-  let cwd      = wikiDir config ++ "/data"
+  let cwd  = wikiDir config ++ "/data"
   result  <- runCommand cwd "git" ["log", "--", slug ++ ".md"]
-  return $ parseHistory slug $ lines result
+  parseHistory config slug $ lines result
 
-parseHistory :: String -> [String] -> [Revision]
-parseHistory slug lines = parseHistory' slug lines True where
-  parseHistory' _ [] _                                     = []
-  parseHistory' slug (hashLn:authorLn:dateLn:tl) isLatest_ = Revision { hash = hash_
-                                                           , authorName = authorName_
-                                                           , authorEmail = authorEmail_
-                                                           , date = date_
-                                                           , message = message_
-                                                           , pageSlug = slug
-                                                           , isLatest = isLatest_
-                                                           }
-                                                           : parseHistory' slug tl' False
+readDiff :: Config -> String -> String -> IO String
+readDiff config slug hash = do
+  let cwd = wikiDir config ++ "/data"
+  runCommand cwd "git" ["diff", hash ++ "~1", hash, "--", slug ++ ".md"]
+
+parseHistory :: Config -> String -> [String] -> IO [Revision]
+parseHistory config slug lines = parseHistory' slug lines True where
+  parseHistory' _ [] _                                     = return []
+  parseHistory' slug (hashLn:authorLn:dateLn:tl) isLatest_ = do
+    diff_       <- readDiff config slug hash_
+    historyTail <- parseHistory' slug tl' False
+    return $ Revision { hash = hash_
+                      , authorName = authorName_
+                      , authorEmail = authorEmail_
+                      , date = date_
+                      , message = message_
+                      , pageSlug = slug
+                      , isLatest = isLatest_
+                      , diff = diff_
+                      }
+                      : historyTail
     where
       (messageLns, tl')       = span (not . startswith "commit ") tl
       hash_                   = replace "commit " "" hashLn
