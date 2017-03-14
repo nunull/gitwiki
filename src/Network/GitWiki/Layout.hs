@@ -151,12 +151,12 @@ userView u = do
 searchResultsView :: String -> [(String, String, String)] -> Html
 searchResultsView query results = do
   H.h1 "Search Results"
-  H.h2 $ toHtml query
+  H.h3 $ toHtml query
   H.ul ! A.class_ "blank-list" $ mapM_ (H.li . searchResultItemView) results
 
 searchResultItemView :: (String, String, String) -> Html
 searchResultItemView (title, excerpt, link) = do
-  H.h3 $ toHtml title
+  H.h2 $ toHtml title
   H.pre $ toHtml excerpt
   H.nav $ H.a "View" ! A.href (stringValue link)
 
