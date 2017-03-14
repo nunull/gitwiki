@@ -25,13 +25,13 @@ skeleton config user nav page = do
     H.body $ do
       H.header $ do
         H.nav ! A.class_ "nav-left" $ do
-          H.a "home" ! A.href "/"
-          H.a "users" ! A.href "/users"
-          H.a "trash" ! A.href "/trash"
+          H.a "Home" ! A.href "/"
+          H.a "Users" ! A.href "/users"
+          H.a "Trash" ! A.href "/trash"
         H.nav ! A.class_ "nav-right" $ mapM_ navLink nav
       H.div ! A.class_ "content" $ do
         H.div ! A.class_ "sidebar" $ do
-          H.a "add page" ! A.href "/p/add" ! A.class_ "button"
+          H.a "Add Page" ! A.href "/p/add" ! A.class_ "button"
           H.ul ! A.class_ "blank-list" $ mapM_ (H.li . pageLink) pageNames
         H.main page
       H.footer $ do
@@ -68,14 +68,14 @@ editPageView config page = return $ do
   (H.form ! A.method (stringValue "POST") ! A.action (stringValue $ "/p/" ++ slug page ++ "/edit")) $ do
     H.textarea ! A.name "content" $ toHtml $ content page
     H.br
-    H.button ! A.type_ "submit" $ "save"
+    H.button ! A.type_ "submit" $ "Save"
 
 removePageView :: Config -> Page -> IO Html
 removePageView config page = return $ do
   H.h1 $ toHtml $ "Remove " ++ slug page
   H.p $ H.strong $ toHtml ("Are you sure you want to remove " ++ slug page ++ "?")
   (H.form ! A.method (stringValue "POST") ! A.action (stringValue $ "/p/" ++ slug page ++ "/remove")) $ do
-    H.button ! A.type_ "submit" $ "ok"
+    H.button ! A.type_ "submit" $ "OK"
 
 pageHistoryView :: Config -> Page -> IO Html
 pageHistoryView config page = do
@@ -95,13 +95,13 @@ historyItemView rev = do
       H.span ">"
   H.div $ H.time $ toHtml $ showDate $ date rev
   H.nav $ do
-    H.a "view"
+    H.a "View"
       ! A.href (stringValue $ if not $ isLatest rev
         then "/p/" ++ pageSlug rev ++ "/history/" ++ (shorthash $ hash rev)
         else "/p/" ++ pageSlug rev
       )
     if not $ isLatest rev
-      then H.a "revert" ! A.href (stringValue $ "/p/" ++ pageSlug rev ++ "/history/" ++ hash rev ++ "/revert")
+      then H.a "Revert" ! A.href (stringValue $ "/p/" ++ pageSlug rev ++ "/history/" ++ hash rev ++ "/revert")
       else ""
   diffView $ diff rev
 
@@ -129,7 +129,7 @@ revisionRevertView config page = return $ do
     ! A.method (stringValue "POST")
     ! A.action (stringValue $ "/p/" ++ slug page ++ "/history/" ++ revision page ++ "/revert")
     $ do
-      H.button ! A.type_ "submit" $ "ok"
+      H.button ! A.type_ "submit" $ "OK"
 
 userView :: User -> Html
 userView u = do
@@ -142,8 +142,8 @@ userView u = do
       H.span "> "
       H.span (if admin u then "(Admin)" else "")
       H.nav $ do
-        H.a "edit" ! A.href (stringValue $ "/users/" ++ email u ++ "/edit")
-        H.a "delete" ! A.href (stringValue $ "/users/" ++ email u ++ "/delete")
+        H.a "Edit" ! A.href (stringValue $ "/users/" ++ email u ++ "/edit")
+        H.a "Delete" ! A.href (stringValue $ "/users/" ++ email u ++ "/delete")
 
 showDate :: UTCTime -> String
 showDate d = formatTime defaultTimeLocale "%F %T" d

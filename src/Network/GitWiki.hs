@@ -120,13 +120,13 @@ run = do
       user   <- extractUser config
       let nav = [("cancel", "/")]
       p <- liftIO $ skeleton config user nav $ do
-        H.h1 "Add page"
+        H.h1 "Add Page"
         (H.form ! A.method (stringValue "POST") ! A.action "/p/add") $ do
           H.input ! A.type_ "text" ! A.name "page" ! A.placeholder "Slug"
           H.br
           H.textarea ! A.name "content" $ ""
           H.br
-          H.button ! A.type_ "submit" $ "save"
+          H.button ! A.type_ "submit" $ "Save"
       html $ renderHtml $ p
 
     post "/p/add" $ do
@@ -141,9 +141,9 @@ run = do
       user      <- extractUser config
       pageParam <- param "page"
       page      <- liftIO $ readPage config pageParam "HEAD"
-      let nav    = [ ("edit", "/p/" ++ pageParam ++ "/edit")
-                   , ("remove", "/p/" ++ pageParam ++ "/remove")
-                   , ("history", "/p/" ++ pageParam ++ "/history")
+      let nav    = [ ("Edit", "/p/" ++ pageParam ++ "/edit")
+                   , ("Remove", "/p/" ++ pageParam ++ "/remove")
+                   , ("History", "/p/" ++ pageParam ++ "/history")
                    ]
       p         <- liftIO $ skeleton config user nav $ markdown def $ content page
       html $ renderHtml $ p
@@ -153,7 +153,7 @@ run = do
       pageParam <- param "page"
       page      <- liftIO $ readPage config pageParam "HEAD"
       pageHtml  <- liftIO $ editPageView config page
-      let nav    = [("cancel", "/p/" ++ pageParam)]
+      let nav    = [("Cancel", "/p/" ++ pageParam)]
       p         <- liftIO $ skeleton config user nav pageHtml
       html $ renderHtml $ p
 
@@ -169,7 +169,7 @@ run = do
       pageParam <- param "page"
       page      <- liftIO $ readPage config pageParam "HEAD"
       pageHtml  <- liftIO $ removePageView config page
-      let nav        = [("cancel", "/p/" ++ pageParam)]
+      let nav        = [("Cancel", "/p/" ++ pageParam)]
       p <- liftIO $ skeleton config user nav pageHtml
       html $ renderHtml $ p
 
@@ -192,7 +192,7 @@ run = do
       pageParam <- param "page"
       page      <- liftIO $ readPage config pageParam "HEAD"
       pageHtml  <- liftIO $ pageHistoryView config page
-      let nav    = [("cancel", "/p/" ++ pageParam)]
+      let nav    = [("Cancel", "/p/" ++ pageParam)]
       p         <- liftIO $ skeleton config user nav pageHtml
       html $ renderHtml $ p
 
@@ -202,8 +202,8 @@ run = do
       hashParam <- param "hash"
       page      <- liftIO $ readPage config pageParam hashParam
       pageHtml  <- liftIO $ revisionView config page
-      let nav    = [ ("cancel", "/p/" ++ pageParam ++ "/history")
-                   , ("revert", "/p/" ++ pageParam ++ "/history/" ++ hashParam ++ "/revert")
+      let nav    = [ ("Cancel", "/p/" ++ pageParam ++ "/history")
+                   , ("Revert", "/p/" ++ pageParam ++ "/history/" ++ hashParam ++ "/revert")
                    ]
       p         <- liftIO $ skeleton config user nav pageHtml
       html $ renderHtml $ p
@@ -214,7 +214,7 @@ run = do
       hashParam <- param "hash"
       page      <- liftIO $ readPage config pageParam hashParam
       pageHtml  <- liftIO $ revisionRevertView config page
-      let nav    = [("cancel", "/p/" ++ pageParam ++ "/history/" ++ hashParam)]
+      let nav    = [("Cancel", "/p/" ++ pageParam ++ "/history/" ++ hashParam)]
       p         <- liftIO $ skeleton config user nav pageHtml
       html $ renderHtml $ p
 
@@ -234,7 +234,7 @@ run = do
             H.nav $ H.form
               ! A.method (stringValue "POST")
               ! A.action (stringValue $ "/p/" ++ name ++ "/restore")
-              $ H.button "restore" ! A.type_ "submit"
+              $ H.button "Restore" ! A.type_ "submit"
           nav = []
       p <- liftIO $ skeleton config user nav $ do
         H.h1 "Trash"
@@ -244,7 +244,7 @@ run = do
     get "/users" $ do
       user   <- extractUser config
       users  <- liftIO $ readUsers config
-      let nav = [("add", "/users/add")]
+      let nav = [("Add", "/users/add")]
       p <- liftIO $ skeleton config user nav $ do
         H.h1 "Users"
         H.ul ! A.class_ "blank-list" $ mapM_ (H.li . userView) users
@@ -252,9 +252,9 @@ run = do
 
     get "/users/add/" $ do
       user   <- extractUser config
-      let nav = [("cancel", "/users")]
+      let nav = [("Cancel", "/users")]
       p <- liftIO $ skeleton config user nav $ do
-        H.h1 "Add user"
+        H.h1 "Add User"
         (H.form ! A.method (stringValue "POST") ! A.action "/users/add") $ do
           H.input ! A.type_ "text" ! A.name "name" ! A.placeholder "Name"
           H.br
@@ -266,7 +266,7 @@ run = do
             H.label "Admin: "
             H.input ! A.type_ "checkbox" ! A.name "admin"
           H.br
-          H.button ! A.type_ "submit" $ "save"
+          H.button ! A.type_ "submit" $ "Save"
       html $ renderHtml $ p
 
     post "/users/add" $ do
@@ -289,9 +289,9 @@ run = do
       emailParam <- param "email"
       users      <- liftIO $ readUsers config
       let user_   = find (\u -> email u == emailParam) users
-          nav     = [("cancel", "/users")]
+          nav     = [("Cancel", "/users")]
       p <- liftIO $ skeleton config user nav $ do
-        H.h1 "Edit user"
+        H.h1 "Edit User"
         case user_ of
           Nothing -> H.strong $ toHtml $ "User with email " ++ emailParam ++ " not found."
           Just u  -> H.form
@@ -307,7 +307,7 @@ run = do
                 H.label "Admin: "
                 H.input ! A.type_ "checkbox" ! A.name "admin"
               H.br
-              H.button ! A.type_ "submit" $ "save"
+              H.button ! A.type_ "submit" $ "Save"
       html $ renderHtml $ p
 
     post "/users/:email/edit" $ do
@@ -335,9 +335,9 @@ run = do
       emailParam <- param "email"
       users      <- liftIO $ readUsers config
       let user_   = find (\u -> email u == emailParam) users
-          nav     = [("cancel", "/users")]
+          nav     = [("Cancel", "/users")]
       p <- liftIO $ skeleton config user nav $ do
-        H.h1 "Delete user"
+        H.h1 "Delete User"
         case user_ of
           Nothing -> H.strong $ toHtml $ "User with email " ++ emailParam ++ " not found."
           Just u  -> do
@@ -346,7 +346,7 @@ run = do
               ! A.method (stringValue "POST")
               ! A.action (stringValue $ "/users/" ++ email u ++ "/delete")
               $ do
-                H.button ! A.type_ "submit" $ "ok"
+                H.button ! A.type_ "submit" $ "OK"
       html $ renderHtml $ p
 
     post "/users/:email/delete" $ do
