@@ -18,7 +18,7 @@ css = do
     color white
     ":hover" & do
       background $ darken 0.1 darkBlue
-  h1 <> h2 ?  fontWeight normal
+  h1 <> h2 ? fontWeight normal
   pre ? do
     smallPadding
     borderRadius tinyLength tinyLength tinyLength tinyLength
@@ -51,7 +51,8 @@ css = do
     flexDirection column
     margin zero zero zero zero
     fontFamily [] [sansSerif]
-    fontSize (px 15)
+  body <> button ? do
+    fontSize (px 14)
     lineHeight (em 1.4)
   header ? do
     marginTop (px $ - 18)

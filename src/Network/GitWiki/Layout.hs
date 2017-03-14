@@ -142,7 +142,7 @@ userView u = do
       H.span "> "
       H.span (if admin u then "(Admin)" else "")
       H.nav $ do
-        H.a "Edit" ! A.href (stringValue $ "/users/" ++ email u ++ "/edit")
+        H.a "Edit" ! A.class_ "button" ! A.href (stringValue $ "/users/" ++ email u ++ "/edit")
         H.a "Delete" ! A.href (stringValue $ "/users/" ++ email u ++ "/delete")
 
 showDate :: UTCTime -> String
