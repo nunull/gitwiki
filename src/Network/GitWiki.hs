@@ -3,12 +3,14 @@ module Network.GitWiki (run) where
 
 import           Control.Monad.IO.Class
 import qualified Data.ByteString.Char8 as BS
+import           Data.Char (toLower)
 import           Data.List
 import           Data.Maybe
 import           Data.SecureMem
 import qualified Data.Text.Lazy as T
 import           Network.Wai.Middleware.HttpAuth
 import qualified Paths_gitwiki as Package
+import           Data.String.Utils
 import           System.Directory
 import           System.Environment
 import           System.Exit
@@ -33,6 +35,9 @@ prompt :: String -> IO String
 prompt msg = do
   putStrLn msg
   getLine
+
+makeSlug :: String -> String
+makeSlug = map toLower . replace " " "-"
 
 setup :: Config -> IO ()
 setup config = do
@@ -128,8 +133,9 @@ run = do
       user      <- extractUser config
       pageParam <- param "page"
       content   <- param "content"
-      liftIO $ writeAndCommit config user pageParam content
-      redirect $ T.pack $ "/p/" ++ pageParam
+      let slug = makeSlug pageParam
+      liftIO $ writeAndCommit config user slug content
+      redirect $ T.pack $ "/p/" ++ slug
 
     get "/p/:page" $ do
       user      <- extractUser config
@@ -296,8 +302,9 @@ run = do
               H.br
               H.input ! A.type_ "password" ! A.name "password" ! A.placeholder "Password"
               H.br
-              H.label "Admin: "
-              H.input ! A.type_ "checkbox" ! A.name "admin"
+              H.div $ do
+                H.label "Admin: "
+                H.input ! A.type_ "checkbox" ! A.name "admin"
               H.br
               H.button ! A.type_ "submit" $ "save"
       html $ renderHtml $ p

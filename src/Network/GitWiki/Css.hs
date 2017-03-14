@@ -13,14 +13,14 @@ css = do
     cursor pointer
     border solid (px 0) transparent
     borderRadius tinyLength tinyLength tinyLength tinyLength
-    padding smallLength smallLength smallLength smallLength
+    smallPadding
     background darkBlue
     color white
     ":hover" & do
       background $ darken 0.1 darkBlue
   h1 <> h2 ?  fontWeight normal
   pre ? do
-    padding smallLength smallLength smallLength smallLength
+    smallPadding
     borderRadius tinyLength tinyLength tinyLength tinyLength
     background lightGrey
   "input[type=text]" <> "input[type=email]" <> "input[type=password]" <> textarea ? do
@@ -28,9 +28,13 @@ css = do
     boxSizing borderBox
     border solid (px 0) transparent
     marginBottom smallLength
-    padding smallLength smallLength smallLength smallLength
+    smallPadding
     background lightGrey
     monoFont
+  blockquote ? do
+    borderLeft solid (px 3) lightGrey
+    marginLeft zero
+    paddingLeft smallLength
   textarea ? do
     minHeight (px 500)
     "resize" -: "vertical"
@@ -41,7 +45,8 @@ css = do
     flexDirection column
     margin zero zero zero zero
     fontFamily [] [sansSerif]
-    fontSize (px 14)
+    fontSize (px 15)
+    lineHeight (em 1.4)
   header ? do
     marginTop (px $ - 18)
     display flex
@@ -52,28 +57,43 @@ css = do
       width sidebarWidth
     ".nav-right" ? do
       flexGrow 1
-  footer ? nav ? background white
+      ":first-child" ? paddingLeft zero
+  footer ? nav ? do
+    smallPadding
+    background white
   ".content" ? do
     display flex
     flexGrow 1
     ".sidebar" ? do
+      boxSizing borderBox
       display flex
       flexDirection column
       width sidebarWidth
       paddingLeft smallLength
+      paddingRight smallLength
       ul ?  flexGrow 1
     main_ ?  flexGrow 1
   nav <> ".diff" ? do
+    boxSizing borderBox
     marginTop smallLength
     marginBottom smallLength
-    padding smallLength smallLength smallLength smallLength
     background lightGrey
-  (nav <> Clay.div) |> (star) ?  marginRight smallLength
+  nav |> a ? do
+    display inlineBlock
+    smallPadding
+    paddingRight zero
+  ".diff" ? smallPadding
+  -- (nav <> Clay.div) |> (star) ?  marginRight smallLength
   main_ ? do
     width $ pct 100
     maxWidth $ pageWidth
   ".diff" ? do
     monoFont
+    ".diff-lien" ? do
+      ":before" & do
+        "content" -: "'+'"
+        marginRight smallLength
+        opacity 0.5
     ".diff-line-added" ? do
       color green
       ":before" & do
@@ -102,3 +122,4 @@ css = do
     lightGrey    = rgb 230 230 230
     darkGrey     = rgb 40 40 40
     monoFont     = fontFamily ["Monaco"] [monospace]
+    smallPadding = padding smallLength smallLength smallLength smallLength

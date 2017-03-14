@@ -25,13 +25,13 @@ skeleton config user nav page = do
     H.body $ do
       H.header $ do
         H.nav ! A.class_ "nav-left" $ do
-          H.a "add page" ! A.href "/p/add" ! A.class_ "button"
           H.a "home" ! A.href "/"
           H.a "users" ! A.href "/users"
           H.a "trash" ! A.href "/trash"
         H.nav ! A.class_ "nav-right" $ mapM_ navLink nav
       H.div ! A.class_ "content" $ do
         H.div ! A.class_ "sidebar" $ do
+          H.a "add page" ! A.href "/p/add" ! A.class_ "button"
           H.ul $ mapM_ (H.li . pageLink) pageNames
         H.main page
       H.footer $ do
@@ -41,7 +41,7 @@ skeleton config user nav page = do
             H.span " <"
             H.a ! A.href (stringValue ("mailto:" ++ email user)) $ toHtml $ email user
             H.span ">"
-          H.span "version"
+          H.span " version "
           H.span $ toHtml $ showVersion $ version config
 
 pageLink :: String -> Html
