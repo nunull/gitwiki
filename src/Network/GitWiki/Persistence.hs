@@ -10,8 +10,10 @@ module Network.GitWiki.Persistence ( readPages
                                    , removeAndCommit
                                    , runCommand
                                    , hashPassword
+                                   , search
                                    ) where
 
+import           Control.Exception
 import           Control.Monad
 import qualified Data.ByteString.Lazy.UTF8 as BS
 import           Data.Digest.Pure.SHA
@@ -154,3 +156,18 @@ readDeletedPageHash config name = do
 
 hashPassword :: String -> String
 hashPassword password = showDigest $ sha512 $ BS.fromString password
+
+search :: Config -> String -> IO [(String, String, String)]
+search config query = do
+  let cwd = wikiDir config ++ "/data"
+  grepResults <- try $ runCommand cwd "git" ["grep", "-i", query] :: IO (Either IOError String)
+  case grepResults of
+    Left _    -> return []
+    Right val -> return $ parseGrepResults val
+
+parseGrepResults :: String -> [(String, String, String)]
+parseGrepResults grepResults = map parseLine $ lines grepResults where
+  parseLine l = (page, excerpt, "/p/" ++ page) where
+    (fileField:excerptParts) = splitOn ":" l
+    excerpt                  = intercalate ":" excerptParts
+    page                     = replace ".md" "" fileField

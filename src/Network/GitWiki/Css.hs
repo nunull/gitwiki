@@ -23,7 +23,7 @@ css = do
     smallPadding
     borderRadius tinyLength tinyLength tinyLength tinyLength
     background lightGrey
-  "input[type=text]" <> "input[type=email]" <> "input[type=password]" <> textarea ? do
+  "input[type=text]" <> "input[type=email]" <> "input[type=search]" <> "input[type=password]" <> textarea ? do
     width $ pct 100
     boxSizing borderBox
     border solid (px 0) transparent
@@ -60,11 +60,19 @@ css = do
     nav ? do
       background darkGrey
       star ? color white
+      form <> input ? do
+        display inlineBlock
+        margin zero zero zero zero
+      form ? marginTop (px 15)
+      "input[type=search]" ? do
+        marginBottom zero
+        padding smallerLength smallerLength smallerLength smallerLength
+        borderRadius tinyLength tinyLength tinyLength tinyLength
+        background $ rgba 80 80 80 0.4
     ".nav-left" ? do
       width sidebarWidth
     ".nav-right" ? do
       flexGrow 1
-      ":first-child" ? paddingLeft zero
   footer ? nav ? do
     smallPadding
     background white
@@ -90,7 +98,6 @@ css = do
     smallPadding
     paddingRight zero
   ".diff" ? smallPadding
-  -- (nav <> Clay.div) |> (star) ?  marginRight smallLength
   main_ ? do
     width $ pct 100
     maxWidth $ pageWidth

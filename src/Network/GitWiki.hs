@@ -358,3 +358,12 @@ run = do
                          Just n  -> removeAtIndex n users
       liftIO $ writeUsers config users'
       redirect $ T.pack $ "/users"
+
+    get "/search" $ do
+      user       <- extractUser config
+      queryParam <- param "q"
+      results    <- liftIO $ search config queryParam
+      let nav     = []
+      p          <- liftIO $ skeleton config user nav $ do
+        searchResultsView queryParam results
+      html $ renderHtml $ p

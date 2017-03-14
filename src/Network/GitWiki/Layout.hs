@@ -28,7 +28,10 @@ skeleton config user nav page = do
           H.a "Home" ! A.href "/"
           H.a "Users" ! A.href "/users"
           H.a "Trash" ! A.href "/trash"
-        H.nav ! A.class_ "nav-right" $ mapM_ navLink nav
+        H.nav ! A.class_ "nav-right" $ do
+          H.form ! A.method "GET" ! A.action "/search" $ do
+            H.input ! A.type_ "search" ! A.name "q" ! A.placeholder "Search"
+          mapM_ navLink nav
       H.div ! A.class_ "content" $ do
         H.div ! A.class_ "sidebar" $ do
           H.a "Add Page" ! A.href "/p/add" ! A.class_ "button"
@@ -144,6 +147,18 @@ userView u = do
       H.nav $ do
         H.a "Edit" ! A.class_ "button" ! A.href (stringValue $ "/users/" ++ email u ++ "/edit")
         H.a "Delete" ! A.href (stringValue $ "/users/" ++ email u ++ "/delete")
+
+searchResultsView :: String -> [(String, String, String)] -> Html
+searchResultsView query results = do
+  H.h1 "Search Results"
+  H.h2 $ toHtml query
+  H.ul ! A.class_ "blank-list" $ mapM_ (H.li . searchResultItemView) results
+
+searchResultItemView :: (String, String, String) -> Html
+searchResultItemView (title, excerpt, link) = do
+  H.h3 $ toHtml title
+  H.pre $ toHtml excerpt
+  H.nav $ H.a "View" ! A.href (stringValue link)
 
 showDate :: UTCTime -> String
 showDate d = formatTime defaultTimeLocale "%F %T" d
