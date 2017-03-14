@@ -150,8 +150,7 @@ userView u = do
 
 searchResultsView :: String -> [(String, String, String)] -> Html
 searchResultsView query results = do
-  H.h1 "Search Results"
-  H.h3 $ toHtml query
+  H.h1 $ toHtml ("Search Results for \"" ++ query ++ "\"")
   H.ul ! A.class_ "blank-list" $ mapM_ (H.li . searchResultItemView) results
 
 searchResultItemView :: (String, String, String) -> Html
