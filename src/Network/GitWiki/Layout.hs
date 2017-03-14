@@ -32,7 +32,7 @@ skeleton config user nav page = do
       H.div ! A.class_ "content" $ do
         H.div ! A.class_ "sidebar" $ do
           H.a "add page" ! A.href "/p/add" ! A.class_ "button"
-          H.ul $ mapM_ (H.li . pageLink) pageNames
+          H.ul ! A.class_ "blank-list" $ mapM_ (H.li . pageLink) pageNames
         H.main page
       H.footer $ do
         H.nav $ do
@@ -57,7 +57,7 @@ indexView config = do
   let history = sortBy (\a b -> compare (date b) (date a)) $ concat histories
   return $ do
     H.h1 "History"
-    H.ul $ mapM_ (H.li . historyItemView) history
+    H.ul ! A.class_ "blank-list" $ mapM_ (H.li . historyItemView) history
 
 logItemView :: Revision -> Html
 logItemView revision = H.span "logitem"
@@ -82,7 +82,7 @@ pageHistoryView config page = do
   revisions <- readHistory config $ slug page
   return $ do
     H.h1 $ toHtml $ "History of " ++ slug page
-    H.ul $ mapM_ (H.li . historyItemView) revisions
+    H.ul ! A.class_ "blank-list" $ mapM_ (H.li . historyItemView) revisions
 
 historyItemView :: Revision -> Html
 historyItemView rev = do

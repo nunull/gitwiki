@@ -39,6 +39,12 @@ css = do
     minHeight (px 500)
     "resize" -: "vertical"
   ":not(a):focus" ? outline solid (px 3) darkBlue
+  ".blank-list" ? do
+    "list-style" -: "none"
+    paddingLeft zero
+    li ? do
+      paddingTop smallerLength
+      paddingBottom smallerLength
   body ? do
     display flex
     minHeight (vh 100)
@@ -71,7 +77,7 @@ css = do
       width sidebarWidth
       paddingLeft smallLength
       paddingRight smallLength
-      ul ?  flexGrow 1
+      ul ? flexGrow 1
     main_ ?  flexGrow 1
   nav <> ".diff" ? do
     boxSizing borderBox
@@ -117,13 +123,14 @@ css = do
         width smallLength
         opacity 0.3
   where
-    zero         = px 0
-    tinyLength   = px 2
-    smallLength  = px 18
-    pageWidth    = px 700
-    sidebarWidth = px 300
-    darkBlue     = rgb 53 112 206
-    lightGrey    = rgb 230 230 230
-    darkGrey     = rgb 40 40 40
-    monoFont     = fontFamily ["Monaco"] [monospace]
-    smallPadding = padding smallLength smallLength smallLength smallLength
+    zero           = px 0
+    tinyLength     = px 2
+    smallerLength  = px 6
+    smallLength    = px 18
+    pageWidth      = px 700
+    sidebarWidth   = px 300
+    darkBlue       = rgb 53 112 206
+    lightGrey      = rgb 230 230 230
+    darkGrey       = rgb 40 40 40
+    monoFont       = fontFamily ["Monaco"] [monospace]
+    smallPadding   = padding smallLength smallLength smallLength smallLength

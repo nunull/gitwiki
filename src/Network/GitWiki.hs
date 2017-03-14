@@ -230,7 +230,7 @@ run = do
       user          <- extractUser config
       deletedPages  <- liftIO $ readTrash config
       let deletedPage name = do
-            H.span $ toHtml name
+            H.h2 $ toHtml name
             H.nav $ H.form
               ! A.method (stringValue "POST")
               ! A.action (stringValue $ "/p/" ++ name ++ "/restore")
@@ -238,16 +238,16 @@ run = do
           nav = []
       p <- liftIO $ skeleton config user nav $ do
         H.h1 "Trash"
-        H.ul $ mapM_ (H.li . deletedPage) deletedPages
+        H.ul ! A.class_ "blank-list" $ mapM_ (H.li . deletedPage) deletedPages
       html $ renderHtml $ p
 
     get "/users" $ do
       user   <- extractUser config
       users  <- liftIO $ readUsers config
-      let nav = []
+      let nav = [("add", "/users/add")]
       p <- liftIO $ skeleton config user nav $ do
         H.h1 "Users"
-        H.ul $ mapM_ (H.li . userView) users
+        H.ul ! A.class_ "blank-list" $ mapM_ (H.li . userView) users
       html $ renderHtml $ p
 
     get "/users/add/" $ do
@@ -262,8 +262,9 @@ run = do
           H.br
           H.input ! A.type_ "password" ! A.name "password" ! A.placeholder "Password"
           H.br
-          H.label "Admin: "
-          H.input ! A.type_ "checkbox" ! A.name "admin"
+          H.div $ do
+            H.label "Admin: "
+            H.input ! A.type_ "checkbox" ! A.name "admin"
           H.br
           H.button ! A.type_ "submit" $ "save"
       html $ renderHtml $ p
