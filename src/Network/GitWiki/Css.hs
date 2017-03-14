@@ -89,29 +89,33 @@ css = do
     maxWidth $ pageWidth
   ".diff" ? do
     monoFont
-    ".diff-lien" ? do
+    ".diff-line" ? do
       ":before" & do
-        "content" -: "'+'"
-        marginRight smallLength
-        opacity 0.5
+        "content" -: "''"
+        display inlineBlock
+        width smallLength
+        opacity 0.3
     ".diff-line-added" ? do
       color green
       ":before" & do
         "content" -: "'+'"
-        marginRight smallLength
-        opacity 0.5
+        display inlineBlock
+        width smallLength
+        opacity 0.3
     ".diff-line-removed" ? do
       color red
       ":before" & do
         "content" -: "'-'"
-        marginRight smallLength
-        opacity 0.5
+        display inlineBlock
+        width smallLength
+        opacity 0.3
     ".diff-line-meta" ? do
       color grey
       ":before" & do
         "content" -: "''"
-        marginRight smallLength
-        opacity 0.5
+        display inlineBlock
+        width smallLength
+        opacity 0.3
   where
     zero         = px 0
     tinyLength   = px 2

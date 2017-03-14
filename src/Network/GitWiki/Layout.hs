@@ -109,10 +109,11 @@ diffView :: String -> Html
 diffView diff = H.div ! A.class_ "diff" $ do
   mapM_ diffLineView $ drop 6 $ lines diff
   where
-    diffLineView line = if startswith "+"  line then H.div ! A.class_ "diff-line-added" $ toHtml $ drop 1 $ line
-                   else if startswith "-"  line then H.div ! A.class_ "diff-line-removed" $ toHtml $ drop 1 $ line
-                   else if startswith "\\" line then H.div ! A.class_ "diff-line-meta" $ toHtml $ drop 1 $ line
-                                                else H.div ! A.class_ "diff-line" $ toHtml line
+    lineDiv c line    = H.div ! A.class_ c $ toHtml $ strip $ drop 1 $ line
+    diffLineView line = if startswith "+"  line then lineDiv "diff-line-added" line
+                   else if startswith "-"  line then lineDiv "diff-line-removed" line
+                   else if startswith "\\" line then lineDiv "diff-line-meta" line
+                                                else lineDiv "diff-line" line
 
 revisionView :: Config -> Page -> IO Html
 revisionView config page = return $ do
